@@ -4,9 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start --reset-cache",
-    "test": "jest"
+    "test": "jest",
+    "build-unsigned-android": "npm run build-bundle-android && npm run build-android-gradle",
+    "build-android-gradle": "cross-env ./android/gradlew assembleDebug",
+    "build-bundle-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
+    "cross-env": "^5.2.0",
     "react": "16.6.3",
     "react-native": "0.58.5",
     "react-native-dotenv": "^0.2.0",

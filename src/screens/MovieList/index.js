@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {MOVIEDB_ENDPOINT_V3, MOVIEDB_API_KEY} from 'react-native-dotenv'
-import {ScrollView, View} from 'react-native'
+import {ScrollView, FlatList, View} from 'react-native'
 
 import MovieItem from '../../components/MovieItem.jsx'
 
@@ -29,7 +29,8 @@ export default class MovieList extends Component{
         let url = `${MOVIEDB_ENDPOINT_V3}/movie/popular?api_key=${MOVIEDB_API_KEY}`
 
         try{
-            let response = await fetch(url).then(response => {return response.json()})
+            let response = await fetch(url).then(response => {return response.json()})            
+            console.log(response);
             
             this.setState({movieList:response.results})
         }
@@ -40,16 +41,15 @@ export default class MovieList extends Component{
     }
 
     render(){
-        let movieList = this.state.movieList.map( (item,index) =>{
-            return <MovieItem {...item} key={index}/>
-        })
 
         return (
-            <ScrollView>
-                <View style={{padding:8}}>
-                    {movieList}
-                </View>
-            </ScrollView>
+            <FlatList numColumns={3}
+                data={this.state.movieList}
+                renderItem={({item}) => <MovieItem movieData={item} navigation={this.props.navigation}/>}
+                keyExtractor={(item,index) => index.toString()}
+                extraData={this.props.navigation}
+                columnWrapperStyle={{flexWrap:'nowrap', flex:1, marginTop:5,
+                alignItems:'space-between'}}/>
         )
     }
 }
